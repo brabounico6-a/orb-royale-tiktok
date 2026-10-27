@@ -44,6 +44,30 @@ let giftCostById = new Map();
 let likeBatch = 0;
 let likeTimer = null;
 
+// V20: cada espectador pode receber o bônus de compartilhar uma vez a cada 5 min.
+// A conexão do servidor não depende de o usuário manter o app aberto.
+const SHARE_BONUS_INTERVAL_MS = 5 * 60 * 1000;
+const lastShareBonusByViewer = new Map();
+
+function shareIsEligible(liveOwner, viewer) {
+  const owner = String(liveOwner||'').trim().toLowerCase();
+  const uniqueViewer = String(viewer||'').trim().toLowerCase();
+  if (!uniqueViewer) return false;
+  const key = `${owner}|${uniqueViewer}`;
+  const now = Date.now();
+  const previous = lastShareBonusByViewer.get(key) || 0;
+  if (now - previous < SHARE_BONUS_INTERVAL_MS) return false;
+  lastShareBonusByViewer.set(key, now);
+
+  if (lastShareBonusByViewer.size > 3000) {
+    for (const [k, t] of lastShareBonusByViewer) {
+      if (now - t >= SHARE_BONUS_INTERVAL_MS) lastShareBonusByViewer.delete(k);
+    }
+  }
+  return true;
+}
+
+
 const status = {
   connected: false,
   connecting: false,
@@ -80,6 +104,28 @@ function userName(data) {
     data?.user?.nickname ||
     'usuario'
   ).replace(/^@/, '').trim().slice(0, 64) || 'usuario';
+}
+
+
+function profilePictureUrl(data) {
+  const candidates = [
+    data?.profilePictureUrl,
+    data?.user?.profilePictureUrl,
+    data?.userDetails?.profilePictureUrls?.[0],
+    data?.user?.userDetails?.profilePictureUrls?.[0],
+    data?.user?.avatarThumb?.urlList?.[0],
+    data?.user?.avatar_thumb?.url_list?.[0],
+    data?.avatarThumb?.urlList?.[0],
+    data?.avatar_thumb?.url_list?.[0]
+  ];
+
+  for (const value of candidates) {
+    if (typeof value === 'string' && /^https?:\/\//i.test(value)) {
+      return value;
+    }
+  }
+
+  return '';
 }
 
 function giftName(data) {
@@ -235,13 +281,18 @@ async function connectTikTok(username) {
 
   conn.on(WebcastEvent.FOLLOW, data => {
     emitEvent('follow', {
-      user: userName(data)
+      user: userName(data),
+      avatar: profilePictureUrl(data)
     });
   });
 
   conn.on(WebcastEvent.SHARE, data => {
+    const viewer = userName(data);
+    // Não emite evento nem concede bônus repetido dentro dos 5 minutos.
+    if (!shareIsEligible(clean, viewer)) return;
     emitEvent('share', {
-      user: userName(data)
+      user: viewer,
+      avatar: profilePictureUrl(data)
     });
   });
 
@@ -254,7 +305,18 @@ async function connectTikTok(username) {
     );
   });
 
-  conn.on(WebcastEvent.GIFT, data => {
+  
+  if (WebcastEvent.CHAT) {
+    conn.on(WebcastEvent.CHAT, data => {
+      emitEvent('chat', {
+        user: userName(data),
+        avatar: profilePictureUrl(data),
+        comment: String(data?.comment ?? data?.content ?? '').slice(0, 160)
+      });
+    });
+  }
+
+conn.on(WebcastEvent.GIFT, data => {
     const giftType = Number(
       data?.gift?.type ??
       data?.gift?.giftType ??
@@ -277,6 +339,7 @@ async function connectTikTok(username) {
 
     emitEvent('gift', {
       user: userName(data),
+      avatar: profilePictureUrl(data),
       giftName: giftName(data),
       giftId: giftId(data),
       unitCoins,

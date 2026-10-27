@@ -4,65 +4,194 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#040711">
-<title>ORB ROYALE LIVE V2</title>
+<title>ORB ROYALE LIVE V20</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <main class="app">
-  <header class="topbar">
-    <div>
-      <span class="eyebrow">JOGO INTERATIVO PARA LIVE</span>
-      <h1>ORB <strong>ROYALE</strong></h1>
-      <p>Bolinhas aceleram, batem, quicam e caçam umas às outras.</p>
+  <header class="topbar game-header v11-header v12-header v13-header">
+    <div class="brand-block">
+      <div class="v13-crest">
+        <span class="v13-crest-back">ᛉ</span>
+        <span class="v13-crest-front">ᛏ</span>
+        <span class="v13-crest-orbit"></span>
+      </div>
+      <div class="v11-brand-copy v12-brand-copy v13-brand-copy">
+        <span class="eyebrow">GOLD BATTLE • ARENA AO VIVO</span>
+        <h1>ORB <strong>ROYALE</strong></h1>
+        <p>Batalha automática • evolução • domínio</p>
+      </div>
     </div>
-    <div class="top-actions"><span id="topLiveStatus" class="top-live-status off">● OFF</span>
-      <button id="liveModeBtn" class="live-mode-btn" type="button">📱 MODO LIVE</button>
+    <div class="top-actions">
+      <span id="topLiveStatus" class="top-live-status off">● OFF</span>
+      <button id="musicToggleBtn" class="music-toggle-btn on" type="button">♫ ON</button>
+      <button id="liveModeBtn" class="live-mode-btn" type="button">LIVE</button>
       <button id="settingsBtn" class="icon-btn" type="button">⚙</button>
     </div>
   </header>
+<section class="v18-join-panel glass">
+    <div class="v18-join-title">
+      <div class="v18-title-left">
+        <span class="v18-title-mark">◆</span>
+        <div>
+          <small>COMO PARTICIPAR</small>
+          <strong>ENTRE NA ARENA</strong>
+        </div>
+      </div>
+      <div class="v18-title-right">4 FORMAS DE PARTICIPAR</div>
+    </div>
 
-  <section class="participate glass">
-    <div class="join-rule follow-rule">
-      <span class="rule-icon">➕</span>
-      <div><small>ENTRADA NA ARENA</small><strong>SEGUIU A LIVE</strong><b>BOLINHA NV.1 + 1 LÂMINA</b></div>
-    </div>
-    <div class="join-rule gift-rule">
-      <span class="rule-icon">🎁</span>
-      <div><small>EVOLUÇÃO DA BOLINHA</small><strong>HEART ME OU ROSA</strong><b>ENTRA OU EVOLUI • MAIS MOEDAS = MAIS PODER</b></div>
-    </div>
-    <div class="join-rule like-rule">
-      <span class="rule-icon">❤️</span>
-      <div><small>EVENTO DE CURTIDAS</small><strong>100 CURTIDAS</strong><b>XP + RECUPERAÇÃO NA ARENA</b></div>
-    </div>
-    <div class="join-rule share-rule">
-      <span class="rule-icon">🔁</span>
-      <div><small>ENTRADA ESPECIAL</small><strong>COMPARTILHOU A LIVE</strong><b>NV.1 + 1 LÂMINA + 1 ESCUDO</b></div>
+    <div class="v18-join-grid">
+      <div class="v18-rule action-follow">
+        <div class="v18-rule-number">01</div>
+        <div class="v18-rule-icon">＋</div>
+        <div class="v18-rule-copy">
+          <small>ENTRADA</small>
+          <strong>SIGA A LIVE</strong>
+          <b>ORB NV.1 + ORBITAL</b>
+        </div>
+      </div>
+
+      <div class="v18-rule action-gift">
+        <div class="v18-rule-number">02</div>
+        <div class="v18-rule-icon">✦</div>
+        <div class="v18-rule-copy">
+          <small>EVOLUÇÃO</small>
+          <strong>HEART ME / ROSA</strong>
+          <b>ENTRA OU EVOLUI A ORB</b>
+        </div>
+      </div>
+
+      <div class="v18-rule action-share">
+        <div class="v18-rule-number">03</div>
+        <div class="v18-rule-icon">↻</div>
+        <div class="v18-rule-copy">
+          <small>A CADA 5 MINUTOS</small>
+          <strong>COMPARTILHE</strong>
+          <b>ESCUDO + XP</b>
+        </div>
+      </div>
+
+      <div class="v18-rule action-like">
+        <div class="v18-rule-number">04</div>
+        <div class="v18-rule-icon">♥</div>
+        <div class="v18-rule-copy">
+          <small>DROP GLOBAL</small>
+          <strong>100 CURTIDAS</strong>
+          <b>XP + RECUPERAÇÃO</b>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="status-grid">
-    <div class="stat glass"><span>NA ARENA</span><b id="orbCount">0</b></div>
-    <div class="stat glass"><span>ELIMINAÇÕES</span><b id="killCount">0</b></div>
-    <div class="stat glass"><span>MAIOR NÍVEL</span><b id="maxLevel">0</b></div>
-    <div class="stat glass"><span>CURTIDAS</span><b id="likesCount">0/100</b></div>
+  <section class="status-grid premium-stats v11-stats">
+    <div class="stat glass"><span>● NA ARENA</span><b id="orbCount">0</b></div>
+    <div class="stat glass"><span>⚔ ELIMINAÇÕES</span><b id="killCount">0</b></div>
+    <div class="stat glass"><span>▲ MAIOR NÍVEL</span><b id="maxLevel">0</b></div>
+    <div class="stat glass"><span>♥︎ DROP</span><b id="likesCount">0/100</b></div>
+  </section>
+
+  <section class="v13-energy-hud glass">
+    <div class="v13-energy-left">
+      <span>⚔ PODER DA ARENA</span>
+      <b id="battleEnergyLabel">0%</b>
+    </div>
+    <div class="v13-energy-track">
+      <div id="battleEnergyFill" class="v13-energy-fill"></div>
+      <div class="v13-energy-spark"></div>
+    </div>
+    <div class="v13-energy-right">
+      <span id="battleModeLabel">AGUARDANDO</span>
+    </div>
   </section>
 
   <section class="game-layout">
-    <section class="arena glass">
+    <section class="arena glass game-arena v11-arena v13-arena">
+      <div class="v13-side-pillar pillar-left"></div>
+      <div class="v13-side-pillar pillar-right"></div>
+      <div class="v13-top-rail"></div>
+      <div class="v13-bottom-rail"></div>
+      <div class="v11-arena-bg v12-arena-bg">
+        <div class="v12-embers"></div>
+        <div class="v12-frost"></div>
+        <div class="v12-rune-ring rune-ring-a"></div>
+        <div class="v12-rune-ring rune-ring-b"></div>
+        <div class="v11-core-glow"></div>
+        <div class="v11-orbit orbit-a"></div>
+        <div class="v11-orbit orbit-b"></div>
+        <div class="v11-scanline"></div>
+      </div>
+      <div class="arena-corners corner-tl"></div>
+      <div class="arena-corners corner-tr"></div>
+      <div class="arena-corners corner-bl"></div>
+      <div class="arena-corners corner-br"></div>
       <canvas id="game"></canvas>
 
       <div id="eventPop" class="event-pop">
+        <div class="event-user-avatar-wrap">
+          <img id="eventUserAvatar" class="event-user-avatar hidden" alt="">
+          <div id="eventUserAvatarFallback" class="event-user-avatar fallback">?</div>
+        </div>
         <img id="eventGiftImage" class="event-gift-image hidden" alt="">
         <div class="event-pop-text">
           <span id="eventUser">@usuario</span>
           <strong id="eventTitle">ENTROU NA ARENA!</strong>
-          <small id="eventSub">Nv.1 • 1 lâmina de energia</small>
+          <small id="eventSub">Nv.1 • 1 orbital de energia</small>
         </div>
       </div>
 
-      <div class="arena-title">
-        <span>⚔️ ARENA TURBO AO VIVO</span>
-        <b id="arenaStatus">AGUARDANDO PARTICIPANTES</b>
+      <div class="arena-title game-arena-title">
+        <div class="arena-title-icon">⚔</div>
+        <div>
+          <span>ARENA DE BATALHA • AO VIVO</span>
+          <b id="arenaStatus">AGUARDANDO PARTICIPANTES</b>
+        </div>
+      </div>
+
+      <div id="championBadge" class="champion-badge hidden">
+        <span class="champion-crown">♛</span>
+        <div><small>LÍDER DA ARENA</small><strong id="championName">@---</strong></div>
+      </div>
+
+      <div id="battleFeed" class="battle-feed"></div>
+      <div class="v14-fight-tip">
+        <span>⚔</span>
+        <b>AS ORBS LUTAM SOZINHAS</b>
+      </div>
+
+      <div class="v13-combat-readout">
+        <span>COMBATE</span>
+        <strong id="combatReadout">CALMO</strong>
+      </div>
+
+      <div class="v12-music-status">
+        <span class="music-pulse"></span>
+        <b>TRILHA DE BATALHA</b>
+      </div>
+
+      <div class="v12-center-emblem">
+        <span>ᛏ</span>
+      </div>
+
+      <div class="v11-battle-state v12-battle-state">
+        <span class="v11-battle-dot"></span>
+        <strong>BATALHA ATIVA</strong>
+      </div>
+
+      <div class="arena-stage-label">
+        <span>SECTOR</span>
+        <strong>NEON CORE</strong>
+      </div>
+
+      <div id="evolutionBanner" class="evolution-banner hidden">
+        <span id="evolutionBannerUser">@usuario</span>
+        <strong id="evolutionBannerTitle">EVOLUÇÃO</strong>
+        <small id="evolutionBannerSub">PODER AUMENTADO</small>
+      </div>
+
+      <div id="koBanner" class="ko-banner hidden">
+        <span>ELIMINAÇÃO</span>
+        <strong id="koBannerText">@A x @B</strong>
       </div>
 
       <div id="emptyHint" class="empty-hint">
@@ -142,9 +271,9 @@
       </div>
     </section>
 
-    <aside class="leaderboard glass">
+    <aside class="leaderboard glass v11-leaderboard">
       <div class="board-head">
-        <div><span class="eyebrow">AO VIVO</span><h2>🏆 TOP DA ARENA</h2></div>
+        <div><span class="eyebrow">AO VIVO</span><h2>🏆 CAMPEÕES</h2></div>
         <span class="live-dot">● LIVE</span>
       </div>
       <div id="ranking" class="ranking"></div>
@@ -279,6 +408,16 @@
       <label class="check">
         <input id="soundInput" type="checkbox" checked>
         Sons do jogo
+      </label>
+      <button id="testSwordSoundBtn" class="v18-test-sword" type="button">⚔ TESTAR SOM DE ESPADA</button>
+      <div id="swordSoundStatus" class="v18-sword-status">Áudio pronto para carregar</div>
+      <label class="check">
+        <input id="musicInput" type="checkbox" checked>
+        Trilha de batalha
+      </label>
+
+      <label>Volume da música
+        <input id="musicVolumeInput" type="range" min="0" max="100" value="92">
       </label>
 
       <label class="check">
