@@ -313,7 +313,7 @@ async function connectTikTok(username) {
   status.message = `Conectado em @${clean}`;
   emitStatus();
 
-  // Catálogo premium desativado: usamos os dados do próprio evento.
+  // Catálogo enriquecido desativado; usamos dados do próprio evento.
 
   return safeStatus();
 }

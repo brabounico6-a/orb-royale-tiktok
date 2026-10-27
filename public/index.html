@@ -82,18 +82,62 @@
             <small>BOLINHA SELECIONADA</small>
             <strong id="inspectUser">@usuario</strong>
           </div>
-          <button id="inspectClose" type="button">✕</button>
+          <div class="inspect-head-actions">
+            <button id="inspectEditBtn" class="inspect-edit-btn" type="button">✏</button>
+            <button id="inspectClose" type="button">✕</button>
+          </div>
         </div>
-        <div class="inspect-grid">
-          <div><span>NÍVEL</span><b id="inspectLevel">1</b></div>
-          <div><span>DURABILIDADE</span><b id="inspectDurability">110</b></div>
-          <div><span>PROTEÇÃO</span><b id="inspectProtection">0</b></div>
-          <div><span>DANO</span><b id="inspectDamage">7</b></div>
+
+        <div id="inspectView">
+          <div class="inspect-grid">
+            <div><span>NÍVEL</span><b id="inspectLevel">1</b></div>
+            <div><span>DURABILIDADE</span><b id="inspectDurability">110</b></div>
+            <div><span>PROTEÇÃO</span><b id="inspectProtection">0</b></div>
+            <div><span>DANO</span><b id="inspectDamage">7</b></div>
+          </div>
+          <div class="inspect-weapon">
+            <span>ARMA ATUAL</span>
+            <strong id="inspectWeapon">Lâmina Inicial</strong>
+            <small id="inspectWeaponDesc">1 lâmina de energia</small>
+          </div>
         </div>
-        <div class="inspect-weapon">
-          <span>ARMA ATUAL</span>
-          <strong id="inspectWeapon">Lâmina Inicial</strong>
-          <small id="inspectWeaponDesc">1 lâmina de energia</small>
+
+        <div id="inspectEditor" class="inspect-editor hidden">
+          <div class="inspect-editor-grid">
+            <label>
+              <span>NÍVEL</span>
+              <input id="editOrbLevel" type="number" min="1" max="9999">
+            </label>
+            <label>
+              <span>DURABILIDADE</span>
+              <input id="editOrbDurability" type="number" min="1" max="999999">
+            </label>
+            <label>
+              <span>PROTEÇÃO</span>
+              <input id="editOrbProtection" type="number" min="0" max="9999">
+            </label>
+            <label>
+              <span>DANO</span>
+              <input id="editOrbDamage" type="number" min="1" max="999999" step="1">
+            </label>
+          </div>
+
+          <label class="inspect-editor-weapon">
+            <span>ESPADA / ARMA</span>
+            <select id="editOrbWeapon"></select>
+          </label>
+
+          <label class="inspect-editor-weapon">
+            <span>QUANTIDADE DE ARMAS</span>
+            <input id="editOrbBlades" type="number" min="1" max="20">
+          </label>
+
+          <div id="inspectEditMessage" class="inspect-edit-message"></div>
+
+          <div class="inspect-editor-actions">
+            <button id="inspectCancelEdit" type="button">CANCELAR</button>
+            <button id="inspectSaveEdit" type="button">💾 SALVAR</button>
+          </div>
         </div>
       </div>
     </section>

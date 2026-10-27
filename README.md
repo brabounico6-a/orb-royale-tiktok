@@ -41,3 +41,19 @@ usa o preço recebido no evento/catálogo da própria sala quando disponível.
 - A imagem é redimensionada para 180x180 e salva localmente no navegador/WebView.
 - A foto aparece no catálogo e no aviso de evolução da LIVE.
 - Para voltar ao emoji padrão, use "REMOVER IMAGEM".
+
+
+## V8 — editor direto da bolinha
+Toque em uma bolinha para abrir o cartão.
+Depois de desbloquear o PIN no painel, toque em ✏ para editar:
+- Nível
+- Durabilidade
+- Proteção
+- Dano
+- Espada/arma
+- Quantidade de armas orbitais
+
+O visual do cartão continua o mesmo; o editor abre dentro dele.
+
+Também inclui a correção de conexão que desativa a rota enriquecida/premium
+de presentes e tenta ler nome/valor diretamente do evento da LIVE.

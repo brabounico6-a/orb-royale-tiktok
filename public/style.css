@@ -537,3 +537,84 @@ body.live-mode .participate{
   z-index:20;
   box-shadow:0 12px 28px rgba(0,0,0,.35);
 }
+
+
+/* ===== V8: EDITAR BOLINHA NO PRÓPRIO CARTÃO ===== */
+.inspect-head-actions{
+  display:flex;
+  gap:4px;
+}
+.inspect-edit-btn{
+  color:#75e7ff !important;
+  border-color:#2b5368 !important;
+  background:#0b2230 !important;
+}
+.inspect-editor{
+  margin-top:7px;
+  padding-top:7px;
+  border-top:1px solid #203449;
+}
+.inspect-editor-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4px;
+}
+.inspect-editor label{
+  display:block;
+}
+.inspect-editor label span{
+  display:block;
+  font-size:4.7px;
+  color:#70859a;
+  font-weight:950;
+  margin-bottom:3px;
+}
+.inspect-editor input,
+.inspect-editor select{
+  width:100%;
+  height:29px;
+  padding:0 6px;
+  border-radius:6px;
+  border:1px solid #294158;
+  background:#030a12;
+  color:#fff;
+  font-size:7px;
+  outline:none;
+}
+.inspect-editor-weapon{
+  margin-top:5px;
+}
+.inspect-edit-message{
+  min-height:12px;
+  margin-top:5px;
+  font-size:5.5px;
+  color:#ff8298;
+}
+.inspect-editor-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4px;
+  margin-top:5px;
+}
+.inspect-editor-actions button{
+  width:100% !important;
+  height:30px !important;
+  border-radius:7px !important;
+  font-size:6px !important;
+  font-weight:950 !important;
+}
+#inspectCancelEdit{
+  border:1px solid #3a4858 !important;
+  background:#0b1420 !important;
+  color:#9eb0c2 !important;
+}
+#inspectSaveEdit{
+  border:1px solid #246d52 !important;
+  background:#0e5139 !important;
+  color:#dffff0 !important;
+}
+@media(max-width:720px){
+  .inspect-card{
+    width:min(260px,72%) !important;
+  }
+}

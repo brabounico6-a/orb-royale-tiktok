@@ -778,10 +778,35 @@ renderGiftCatalog();
 
 
 let inspectedUser=null;
+let inspectEditing=false;
+
+const weaponOptions=[
+  {key:'Lâmina Inicial',name:'Lâmina Inicial',shape:'dagger',tint:'#64ddff',power:1},
+  ...Object.values(weaponCatalog).map(w=>({
+    key:w.name,
+    name:w.name,
+    shape:w.shape,
+    tint:w.tint,
+    power:w.power
+  }))
+];
+
+const uniqueWeapons=[];
+const seenWeaponNames=new Set();
+for(const w of weaponOptions){
+  if(seenWeaponNames.has(w.name))continue;
+  seenWeaponNames.add(w.name);
+  uniqueWeapons.push(w);
+}
+
+$('editOrbWeapon').innerHTML=uniqueWeapons
+  .map(w=>`<option value="${esc(w.name)}">${esc(w.name)}</option>`)
+  .join('');
 
 function showInspect(o){
  if(!o)return;
  inspectedUser=o.user;
+
  $('inspectUser').textContent='@'+o.user;
  $('inspectLevel').textContent=o.level;
  $('inspectDurability').textContent=`${Math.max(0,Math.ceil(o.hp))}/${Math.ceil(o.maxHp)}`;
@@ -789,9 +814,119 @@ function showInspect(o){
  $('inspectDamage').textContent=Math.round(o.damage);
  $('inspectWeapon').textContent=o.weaponName||'Lâmina Inicial';
  $('inspectWeaponDesc').textContent=`${o.blades} arma${o.blades>1?'s':''} orbital${o.blades>1?'is':''} • último presente: ${o.lastGift||'Entrada'}`;
+
+ if(!inspectEditing){
+   $('inspectView').classList.remove('hidden');
+   $('inspectEditor').classList.add('hidden');
+ }
+
  $('inspectCard').classList.remove('hidden');
 }
-$('inspectClose').onclick=()=>{$('inspectCard').classList.add('hidden');inspectedUser=null};
+
+function openOrbEditor(){
+ if(!inspectedUser)return;
+
+ if(!adminPin){
+   $('inspectEditMessage').textContent='🔐 Desbloqueie o PIN em ⚙ para editar.';
+   $('inspectView').classList.remove('hidden');
+   $('inspectEditor').classList.remove('hidden');
+   return;
+ }
+
+ const o=S.orbs.get(inspectedUser);
+ if(!o)return;
+
+ inspectEditing=true;
+ $('inspectView').classList.add('hidden');
+ $('inspectEditor').classList.remove('hidden');
+ $('inspectEditMessage').textContent='';
+
+ $('editOrbLevel').value=Math.max(1,Math.round(o.level||1));
+ $('editOrbDurability').value=Math.max(1,Math.round(o.maxHp||o.durability||110));
+ $('editOrbProtection').value=Math.max(0,Math.round(o.protection||0));
+ $('editOrbDamage').value=Math.max(1,Math.round(o.damage||S.baseDamage));
+ $('editOrbBlades').value=Math.max(1,Math.round(o.blades||1));
+
+ const exists=[...$('editOrbWeapon').options].some(opt=>opt.value===o.weaponName);
+ if(exists)$('editOrbWeapon').value=o.weaponName||'Lâmina Inicial';
+}
+
+function closeOrbEditor(){
+ inspectEditing=false;
+ $('inspectEditor').classList.add('hidden');
+ $('inspectView').classList.remove('hidden');
+ $('inspectEditMessage').textContent='';
+ const o=inspectedUser?S.orbs.get(inspectedUser):null;
+ if(o)showInspect(o);
+}
+
+function saveOrbEditor(){
+ if(!adminPin){
+   $('inspectEditMessage').textContent='🔐 Desbloqueie o PIN em ⚙ primeiro.';
+   return;
+ }
+
+ const o=S.orbs.get(inspectedUser);
+ if(!o){
+   $('inspectEditMessage').textContent='Bolinha não encontrada.';
+   return;
+ }
+
+ const level=Math.max(1,Math.min(9999,Number($('editOrbLevel').value)||1));
+ const durability=Math.max(1,Math.min(999999,Number($('editOrbDurability').value)||110));
+ const protection=Math.max(0,Math.min(9999,Number($('editOrbProtection').value)||0));
+ const damage=Math.max(1,Math.min(999999,Number($('editOrbDamage').value)||1));
+ const blades=Math.max(1,Math.min(20,Number($('editOrbBlades').value)||1));
+ const weaponName=$('editOrbWeapon').value||'Lâmina Inicial';
+
+ const weapon=uniqueWeapons.find(w=>w.name===weaponName) || uniqueWeapons[0];
+
+ o.level=Math.round(level);
+ o.durability=Math.round(durability);
+ o.maxHp=Math.round(durability);
+ o.hp=Math.min(o.maxHp,Math.max(1,o.hp));
+ if(o.hp < o.maxHp*.25)o.hp=o.maxHp;
+
+ o.protection=Math.round(protection);
+ o.damage=damage;
+ o.blades=Math.round(blades);
+
+ o.weaponName=weapon.name;
+ o.weaponShape=weapon.shape;
+ o.weaponTint=weapon.tint;
+ o.weaponPower=weapon.power;
+ o.aura=weapon.tint;
+
+ // Pequena adaptação visual ao nível manual.
+ o.size=Math.min(.065,.0245+Math.log10(o.level+1)*.008);
+ o.speed=Math.min(2.7,1.05+Math.log10(o.level+1)*.22);
+
+ burst(o,o.aura,18);
+ show(
+   o.user,
+   '✏ ATRIBUTOS ATUALIZADOS',
+   `Nv.${o.level} • ${o.weaponName} • ${o.blades} arma${o.blades>1?'s':''}`,
+   o.aura
+ );
+
+ inspectEditing=false;
+ $('inspectEditor').classList.add('hidden');
+ $('inspectView').classList.remove('hidden');
+ updateUI(true);
+ showInspect(o);
+}
+
+$('inspectEditBtn').onclick=openOrbEditor;
+$('inspectCancelEdit').onclick=closeOrbEditor;
+$('inspectSaveEdit').onclick=saveOrbEditor;
+
+$('inspectClose').onclick=()=>{
+ inspectEditing=false;
+ $('inspectCard').classList.add('hidden');
+ $('inspectEditor').classList.add('hidden');
+ $('inspectView').classList.remove('hidden');
+ inspectedUser=null;
+};
 
 canvas.addEventListener('pointerdown',e=>{
  const r=canvas.getBoundingClientRect();
@@ -805,9 +940,13 @@ canvas.addEventListener('pointerdown',e=>{
 });
 
 setInterval(()=>{
- if(inspectedUser){
+ if(inspectedUser && !inspectEditing){
    const o=S.orbs.get(inspectedUser);
-   if(o)showInspect(o);else{$('inspectCard').classList.add('hidden');inspectedUser=null}
+   if(o)showInspect(o);
+   else{
+     $('inspectCard').classList.add('hidden');
+     inspectedUser=null;
+   }
  }
 },500);
 
