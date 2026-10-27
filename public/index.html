@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#040711">
+<title>ORB ROYALE LIVE V2</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="app">
+  <header class="topbar">
+    <div>
+      <span class="eyebrow">JOGO INTERATIVO PARA LIVE</span>
+      <h1>ORB <strong>ROYALE</strong></h1>
+      <p>Bolinhas aceleram, batem, quicam e caçam umas às outras.</p>
+    </div>
+    <div class="top-actions"><span id="topLiveStatus" class="top-live-status off">● OFF</span>
+      <button id="liveModeBtn" class="live-mode-btn" type="button">📱 MODO LIVE</button>
+      <button id="settingsBtn" class="icon-btn" type="button">⚙</button>
+    </div>
+  </header>
+
+  <section class="participate glass">
+    <div class="join-rule follow-rule">
+      <span class="rule-icon">➕</span>
+      <div><small>ENTRADA NA ARENA</small><strong>SEGUIU A LIVE</strong><b>BOLINHA NV.1 + 1 LÂMINA</b></div>
+    </div>
+    <div class="join-rule gift-rule">
+      <span class="rule-icon">🎁</span>
+      <div><small>EVOLUÇÃO DA BOLINHA</small><strong>HEART ME OU ROSA</strong><b>ENTRA OU EVOLUI • MAIS MOEDAS = MAIS PODER</b></div>
+    </div>
+    <div class="join-rule like-rule">
+      <span class="rule-icon">❤️</span>
+      <div><small>EVENTO DE CURTIDAS</small><strong>100 CURTIDAS</strong><b>XP + RECUPERAÇÃO NA ARENA</b></div>
+    </div>
+    <div class="join-rule share-rule">
+      <span class="rule-icon">🔁</span>
+      <div><small>ENTRADA ESPECIAL</small><strong>COMPARTILHOU A LIVE</strong><b>NV.1 + 1 LÂMINA + 1 ESCUDO</b></div>
+    </div>
+  </section>
+
+  <section class="status-grid">
+    <div class="stat glass"><span>NA ARENA</span><b id="orbCount">0</b></div>
+    <div class="stat glass"><span>ELIMINAÇÕES</span><b id="killCount">0</b></div>
+    <div class="stat glass"><span>MAIOR NÍVEL</span><b id="maxLevel">0</b></div>
+    <div class="stat glass"><span>CURTIDAS</span><b id="likesCount">0/100</b></div>
+  </section>
+
+  <section class="game-layout">
+    <section class="arena glass">
+      <canvas id="game"></canvas>
+
+      <div id="eventPop" class="event-pop">
+        <img id="eventGiftImage" class="event-gift-image hidden" alt="">
+        <div class="event-pop-text">
+          <span id="eventUser">@usuario</span>
+          <strong id="eventTitle">ENTROU NA ARENA!</strong>
+          <small id="eventSub">Nv.1 • 1 lâmina de energia</small>
+        </div>
+      </div>
+
+      <div class="arena-title">
+        <span>⚔️ ARENA TURBO AO VIVO</span>
+        <b id="arenaStatus">AGUARDANDO PARTICIPANTES</b>
+      </div>
+
+      <div id="emptyHint" class="empty-hint">
+        <div class="empty-orb">⚪</div>
+        <strong>NINGUÉM ENTROU AINDA</strong>
+        <span>Quem seguir ganha uma bolinha Nv.1 com 1 lâmina</span>
+      </div>
+
+      <div class="likes-meter">
+        <div class="likes-meter-head"><span>❤️ PRÓXIMO DROP</span><b id="likesMeterText">0/100</b></div>
+        <div class="likes-meter-track"><div id="likesMeterFill"></div></div>
+      </div>
+
+      <div id="inspectCard" class="inspect-card hidden">
+        <div class="inspect-head">
+          <div>
+            <small>BOLINHA SELECIONADA</small>
+            <strong id="inspectUser">@usuario</strong>
+          </div>
+          <button id="inspectClose" type="button">✕</button>
+        </div>
+        <div class="inspect-grid">
+          <div><span>NÍVEL</span><b id="inspectLevel">1</b></div>
+          <div><span>DURABILIDADE</span><b id="inspectDurability">110</b></div>
+          <div><span>PROTEÇÃO</span><b id="inspectProtection">0</b></div>
+          <div><span>DANO</span><b id="inspectDamage">7</b></div>
+        </div>
+        <div class="inspect-weapon">
+          <span>ARMA ATUAL</span>
+          <strong id="inspectWeapon">Lâmina Inicial</strong>
+          <small id="inspectWeaponDesc">1 lâmina de energia</small>
+        </div>
+      </div>
+    </section>
+
+    <aside class="leaderboard glass">
+      <div class="board-head">
+        <div><span class="eyebrow">AO VIVO</span><h2>🏆 TOP DA ARENA</h2></div>
+        <span class="live-dot">● LIVE</span>
+      </div>
+      <div id="ranking" class="ranking"></div>
+    </aside>
+  </section>
+
+  <section id="testPanel" class="test-panel glass">
+    <div class="test-head">
+      <div>
+        <span class="eyebrow">MODO TESTE</span>
+        <h2>Simular eventos da LIVE</h2>
+      </div>
+      <button id="likesBtn" class="likes-btn" type="button">❤️ +100 CURTIDAS</button>
+    </div>
+
+    <div class="test-controls follow-controls">
+      <label>@usuário
+        <input id="userInput" value="joao" placeholder="ex: joao">
+      </label>
+      <div class="entry-test-buttons">
+        <button id="followBtn" class="follow-btn" type="button">➕ SIMULAR FOLLOW</button>
+        <button id="shareBtn" class="share-btn" type="button">🔁 SIMULAR COMPARTILHAR</button>
+      </div>
+    </div>
+
+    <div class="test-controls">
+      <label>Presente
+        <select id="giftSelect"></select>
+      </label>
+      <button id="sendGiftBtn" class="send-btn" type="button">🎁 ENVIAR PRESENTE</button>
+    </div>
+
+    <div class="quick-users">
+      <button data-user="joao">@joao</button>
+      <button data-user="maria">@maria</button>
+      <button data-user="lucas">@lucas</button>
+      <button data-user="ana">@ana</button>
+      <button data-user="davi">@davi</button>
+    </div>
+  </section>
+
+  <section id="evolutionCard" class="evolution-card glass">
+    <div class="evo-head">
+      <div><span class="eyebrow">EVOLUÇÃO POR MOEDAS</span><h2>Do seguidor ao Universo</h2></div>
+      <small>O valor em moedas recebido no evento é o que manda. Assim o jogo continua funcionando mesmo se um presente mudar de nome.</small>
+    </div>
+    <div id="evolutionList" class="evolution-list"></div>
+  </section>
+
+  <section id="giftCatalog" class="gift-catalog glass">
+    <div class="evo-head">
+      <div><span class="eyebrow">PRESENTES + EQUIPAMENTOS</span><h2>Cada presente equipa uma arma específica</h2></div>
+      <small>Os preços podem variar por região. No modo conectado, o jogo usa o valor real recebido da LIVE.</small>
+    </div>
+    <div id="catalogList" class="catalog-list"></div>
+  </section>
+
+  <section id="footerActions" class="footer-actions">
+    <button id="fillArenaBtn" type="button">⚡ PREENCHER ARENA TESTE</button>
+    <button id="resetBtn" class="danger-btn" type="button">↻ RESETAR TUDO</button>
+  </section>
+</main>
+
+<div id="settings" class="modal hidden">
+  <div class="settings-card">
+    <div class="settings-head">
+      <div>
+        <span class="eyebrow">PAINEL DA LIVE</span>
+        <h2>ORB ROYALE V6</h2>
+      </div>
+      <button id="closeSettings" class="icon-btn" type="button">✕</button>
+    </div>
+
+    <section id="adminGate" class="admin-gate">
+      <div class="gate-icon">🔐</div>
+      <strong>DESBLOQUEAR PAINEL</strong>
+      <small>Digite o PIN configurado no Render.</small>
+      <input id="adminPinInput" type="password" inputmode="numeric" placeholder="PIN administrativo">
+      <button id="unlockAdminBtn" class="save-btn" type="button">DESBLOQUEAR</button>
+      <div id="adminGateMessage" class="admin-message"></div>
+    </section>
+
+    <section id="adminContent" class="admin-content hidden">
+      <div class="connection-card">
+        <div class="connection-title">
+          <div>
+            <span>📡 TIKTOK LIVE</span>
+            <b id="connectionBadge" class="connection-badge off">DESCONECTADO</b>
+          </div>
+          <small id="connectionMessage">Digite o @usuário que está fazendo a LIVE.</small>
+        </div>
+
+        <label>@usuário da LIVE
+          <input id="tiktokUsernameInput" type="text" autocomplete="off" autocapitalize="off" placeholder="ex: seuperfil">
+        </label>
+
+        <div class="connection-actions">
+          <button id="connectLiveBtn" class="connect-btn" type="button">🟢 CONECTAR LIVE</button>
+          <button id="disconnectLiveBtn" class="disconnect-btn" type="button">DESCONECTAR</button>
+        </div>
+
+        <div class="live-stats">
+          <div><span>EVENTOS</span><b id="liveEventCount">0</b></div>
+          <div><span>ÚLTIMO</span><b id="lastEventType">—</b></div>
+          <div><span>ROOM</span><b id="roomIdText">—</b></div>
+        </div>
+
+        <div class="live-log-wrap">
+          <span>ÚLTIMOS EVENTOS</span>
+          <div id="liveLog" class="live-log">
+            <div>Aguardando conexão...</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-divider"></div>
+
+      <span class="eyebrow">CONFIGURAÇÕES DO JOGO</span>
+
+      <label>Máximo de bolinhas na arena
+        <input id="maxOrbsInput" type="number" min="8" max="80" value="40">
+      </label>
+
+      <label>Dano base das lâminas
+        <input id="damageInput" type="number" min="1" max="50" value="7">
+      </label>
+
+      <label>Preço do “Hatch Me” se o TikTok não informar
+        <input id="hatchPriceInput" type="number" min="1" max="100000" value="5">
+      </label>
+
+      <label class="check">
+        <input id="soundInput" type="checkbox" checked>
+        Sons do jogo
+      </label>
+
+      <label class="check">
+        <input id="namesInput" type="checkbox" checked>
+        Mostrar @nomes na arena
+      </label>
+
+      <button id="saveSettings" class="save-btn" type="button">💾 SALVAR CONFIGURAÇÕES</button>
+
+      <div class="settings-divider"></div>
+
+      <section class="gift-image-manager">
+        <span class="eyebrow">IMAGENS DOS PRESENTES</span>
+        <h3>Trocar emoji por foto</h3>
+        <p>Escolha um presente e selecione uma imagem do celular. Ela fica salva neste aparelho e aparece no jogo.</p>
+
+        <label>Presente
+          <select id="giftImageSelect"></select>
+        </label>
+
+        <div class="gift-image-preview-wrap">
+          <div id="giftImagePreviewFallback" class="gift-image-preview-fallback">🎁</div>
+          <img id="giftImagePreview" class="gift-image-preview hidden" alt="Prévia do presente">
+          <div class="gift-image-preview-info">
+            <b id="giftImagePreviewName">Presente</b>
+            <small id="giftImagePreviewStatus">Usando imagem padrão</small>
+          </div>
+        </div>
+
+        <label class="gift-file-label">
+          Escolher imagem do celular
+          <input id="giftImageFile" type="file" accept="image/*">
+        </label>
+
+        <div class="gift-image-actions">
+          <button id="saveGiftImageBtn" class="connect-btn" type="button">💾 SALVAR IMAGEM</button>
+          <button id="removeGiftImageBtn" class="disconnect-btn" type="button">REMOVER IMAGEM</button>
+        </div>
+
+        <small class="gift-image-note">A imagem é reduzida automaticamente para deixar o jogo leve.</small>
+      </section>
+
+      <button id="lockAdminBtn" class="lock-btn" type="button">🔒 BLOQUEAR PAINEL</button>
+    </section>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
