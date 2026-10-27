@@ -84,16 +84,20 @@ function userName(data) {
 
 function giftName(data) {
   return String(
+    data?.gift?.name ||
     data?.giftDetails?.giftName ||
     data?.extendedGiftInfo?.name ||
     data?.giftName ||
-    `Gift ${data?.giftId ?? ''}`
+    data?.gift?.describe ||
+    `Gift ${data?.giftId ?? data?.gift?.id ?? ''}`
   ).trim() || 'Presente';
 }
 
 function giftId(data) {
   return String(
     data?.giftId ??
+    data?.gift?.id ??
+    data?.gift?.giftId ??
     data?.giftDetails?.giftId ??
     data?.extendedGiftInfo?.id ??
     ''
@@ -102,22 +106,23 @@ function giftId(data) {
 
 function giftUnitCoins(data) {
   const candidates = [
-    data?.extendedGiftInfo?.diamondCount,
-    data?.extendedGiftInfo?.diamond_count,
+    data?.gift?.diamondCount,
+    data?.gift?.diamond_count,
     data?.giftDetails?.diamondCount,
     data?.giftDetails?.diamond_count,
     data?.giftDetails?.price,
     data?.diamondCount,
-    data?.diamond_count
+    data?.diamond_count,
+    data?.extendedGiftInfo?.diamondCount,
+    data?.extendedGiftInfo?.diamond_count
   ];
 
   for (const value of candidates) {
     const n = Number(value);
-    if (Number.isFinite(n) && n > 0) return Math.floor(n);
+    if (Number.isFinite(n) && n > 0) {
+      return Math.floor(n);
+    }
   }
-
-  const id = giftId(data);
-  if (id && giftCostById.has(id)) return giftCostById.get(id);
 
   return 1;
 }
@@ -217,7 +222,7 @@ async function connectTikTok(username) {
   emitStatus();
 
   const options = {
-    enableExtendedGiftInfo: true,
+    enableExtendedGiftInfo: false,
     fetchRoomInfoOnConnect: true
   };
 
@@ -251,6 +256,8 @@ async function connectTikTok(username) {
 
   conn.on(WebcastEvent.GIFT, data => {
     const giftType = Number(
+      data?.gift?.type ??
+      data?.gift?.giftType ??
       data?.giftDetails?.giftType ??
       data?.giftType ??
       0
@@ -306,7 +313,7 @@ async function connectTikTok(username) {
   status.message = `Conectado em @${clean}`;
   emitStatus();
 
-  hydrateGiftCosts(conn).catch(() => {});
+  // Catálogo premium desativado: usamos os dados do próprio evento.
 
   return safeStatus();
 }
